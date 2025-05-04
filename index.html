@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengumuman Kelulusan SMKN 1 Kawunganten</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            background-color: #0d6efd;
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            max-height: 100px;
+            margin-bottom: 1rem;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            padding: 0.5rem 2rem;
+            font-weight: 600;
+        }
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0b5ed7;
+        }
+        .footer {
+            background-color: #0d6efd;
+            color: white;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            .logo {
+                max-height: 80px;
+            }
+        }
+        #countdown {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 2rem 0;
+        }
+        .countdown-container {
+            text-align: center;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header text-center">
+        <div class="container">
+            <img src="logo.png" alt="Logo SMKN 1 Kawunganten" class="logo">
+            <h1 class="display-5 fw-bold">PENGUMUMAN KELULUSAN</h1>
+            <h2 class="fw-light">SMKN 1 KAWUNGANTEN</h2>
+            <p class="lead">Tahun Ajaran 2024/2025</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div id="countdownSection" class="card d-none">
+                    <div class="card-header bg-primary text-white text-center py-3">
+                        <h3 class="mb-0">Pengumuman Belum Dibuka</h3>
+                    </div>
+                    <div class="card-body countdown-container">
+                        <p class="lead">Pengumuman kelulusan akan dibuka pada:</p>
+                        <p class="fw-bold">5 Mei 2025, Pukul 18:00 WIB</p>
+                        <div id="countdown"></div>
+                        <p>Silahkan kembali pada waktu yang telah ditentukan.</p>
+                    </div>
+                </div>
+                
+                <div class="card" id="formCard">
+                    <div class="card-header bg-primary text-white text-center py-3">
+                        <h3 class="mb-0">Cek Kelulusan Siswa</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="alert alert-info" role="alert">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            Masukkan Nomor Induk Siswa (NIS) untuk melihat hasil kelulusan.
+                        </div>
+                        
+                        <form id="formKelulusan">
+                            <div class="mb-3">
+                                <label for="nis" class="form-label fw-bold">Nomor Induk Siswa (NIS)</label>
+                                <input type="text" class="form-control form-control-lg" id="nis" placeholder="Masukkan NIS" required>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">CEK KELULUSAN</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card d-none" id="hasilKelulusan">
+                    <div class="card-header bg-success text-white text-center py-3">
+                        <h3 class="mb-0">Hasil Kelulusan</h3>
+                    </div>
+                    <div class="card-body p-4 text-center">
+                        <div id="contentHasil">
+                            <!-- Hasil kelulusan akan ditampilkan di sini -->
+                        </div>
+                        <div class="mt-3">
+                            <button class="btn btn-secondary" id="backButton">Kembali</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer text-center">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 SMKN 1 Kawunganten. Hak Cipta Dilindungi.</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        // Data siswa
+        const dataSiswa = {
+            "4638": {nisn: "0078285723", nama: "AGUS PRASETYO", tempatLahir: "CIAMIS", kelamin: "L", tanggalLahir: "39314",kelas: "XII TKR A"},
+            "4639": {nisn: "0074419481", nama: "AMELIA PUTRI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39292",kelas: "XII TKR A"},
+            "4640": {nisn: "0068454141", nama: "ANDIKA ADI SAPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38926",kelas: "XII TKR A"},
+            "4641": {nisn: "0089516564", nama: "ANDIKA DWI PUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "5 MARET 2008",kelas: "XII TKR A"},
+            "4642": {nisn: "0067812055", nama: "AZAHRO ZAKATIA RAMADANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39009",kelas: "XII TKR A"},
+            "4643": {nisn: "0072524843", nama: "BERLIANA DIAH KUSUMA WARDANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39214",kelas: "XII TKR A"},
+            "4644": {nisn: "0059313918", nama: "DANI AJI PANGESTU", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "8 MARET 2007",kelas: "XII TKR A"},
+            "4645": {nisn: "0074507091", nama: "DANIL ALIF WICAKSANA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39273",kelas: "XII TKR A"},
+            "4646": {nisn: "0076552808", nama: "EMIR ILHAM", tempatLahir: "DEMAK", kelamin: "L", tanggalLahir: "25 Pebruari 2007",kelas: "XII TKR A"},
+            "4647": {nisn: "0077128769", nama: "FABIL PRIHASTOMO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39165",kelas: "XII TKR A"},
+            "4648": {nisn: "0077337651", nama: "FACHRI HIKMAL ABRAR", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "4 Mei 2007",kelas: "XII TKR A"},
+            "4649": {nisn: "0071564690", nama: "FAHAJ BAWAZIR", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39167",kelas: "XII TKR A"},
+            "4650": {nisn: "0072318893", nama: "FARRAS DZATIL IZZA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39309",kelas: "XII TKR A"},
+            "4651": {nisn: "0074840732", nama: "GHALY AZARIA RAMADHANI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "2 OKTOBER 2007",kelas: "XII TKR A"},
+            "4652": {nisn: "0063181084", nama: "HAFID FIRMAN DANU KUSUMA", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "38973",kelas: "XII TKR A"},
+            "4653": {nisn: "0069453025", nama: "HERI SETIAWAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38989",kelas: "XII TKR A"},
+            "4654": {nisn: "0071054981", nama: "ILHAM AL MUNAWAR", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "3 OKTOBER 2007",kelas: "XII TKR A"},
+            "4655": {nisn: "0072181235", nama: "INDAH NUR ARIFAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39163",kelas: "XII TKR A"},
+            "4656": {nisn: "0056139269", nama: "IQBAL EDO ISNAWAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38575",kelas: "XII TKR A"},
+            "4657": {nisn: "0069419817", nama: "KHAFIN WIBOWO", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "38795",kelas: "XII TKR A"},
+            "4658": {nisn: "0089085135", nama: "KHAISARIL PRASDIKA PRATAMA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39568",kelas: "XII TKR A"},
+            "4659": {nisn: "0083052368", nama: "LUCKY PRATAMA MULYONO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39586",kelas: "XII TKR A"},
+            "4660": {nisn: "0072158216", nama: "MAHDA NAFISAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "1 MEI 2007",kelas: "XII TKR A"},
+            "4661": {nisn: "0068418499", nama: "MUHAMMAD FAIZUL MUBAROK", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38981",kelas: "XII TKR A"},
+            "4662": {nisn: "0073084082", nama: "MUZAKKI HANIF", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39368",kelas: "XII TKR A"},
+            "4663": {nisn: "0078459798", nama: "NUR HARYANTO", tempatLahir: " KEBUMEN", kelamin: "L", tanggalLahir: "39426",kelas: "XII TKR A"},
+            "4664": {nisn: "0079609177", nama: "PRENDI HARDIYANZAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39263",kelas: "XII TKR A"},
+            "4665": {nisn: "0061771308", nama: "PUTRA RAMADHANI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "7 OKTOBER 2006",kelas: "XII TKR A"},
+            "4666": {nisn: "0079655031", nama: "REVA JULIYAN PRATAMA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "1 JULI 2007",kelas: "XII TKR A"},
+            "4667": {nisn: "0078057821", nama: "RHIDO FIRDAUS PRATAMA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "7 Maret 2007",kelas: "XII TKR A"},
+            "4669": {nisn: "0077883477", nama: "YAMA DASAN", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "5 JULI 2007",kelas: "XII TKR A"},
+            "4670": {nisn: "0071855343", nama: "YAN FEBRIANTO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39312",kelas: "XII TKR A"},
+            "4671": {nisn: "0071007040", nama: "YOSI DEBBI ANGGITA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "8 AGUSTUS 2007",kelas: "XII TKR A"},
+            "4672": {nisn: "0067935629", nama: "YUDI SETIAWAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "5 Februari 2006",kelas: "XII TKR A"},
+            "4673": {nisn: "0067723117", nama: "YUSUP CANDRA PURNAMA", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "8 September 2006",kelas: "XII TKR A"},
+            "4674": {nisn: "0068055383", nama: "AKMAL SETIAWAN", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "38949",kelas: "XII TKR B"},
+            "4675": {nisn: "0065886781", nama: "ANDRY SETIAWAN", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "15 Pebruari 2006",kelas: "XII TKR B"},
+            "4676": {nisn: "0078664594", nama: "ASEP IRAWAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38817",kelas: "XII TKR B"},
+            "4677": {nisn: "0073152520", nama: "AURORA MAIDOFA ADY BINTORO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "6 Juni 2007",kelas: "XII TKR B"},
+            "4678": {nisn: "0075774560", nama: "DHANIS KHAERIEL RIFA'I", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39231",kelas: "XII TKR B"},
+            "4679": {nisn: "0131082855", nama: "DIMAS PRASETYO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39438",kelas: "XII TKR B"},
+            "4680": {nisn: "0071606851", nama: "ERIK DWI PURNOMO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39278",kelas: "XII TKR B"},
+            "4681": {nisn: "0072750191", nama: "FAJAR ARDIANSYAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39165",kelas: "XII TKR B"},
+            "4682": {nisn: "0076990949", nama: "FENDI SETIAWAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39324",kelas: "XII TKR B"},
+            "4683": {nisn: "0063123723", nama: "HANDIKA KHOERUL ANAM", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: " 8 Mei 2006",kelas: "XII TKR B"},
+            "4684": {nisn: "0061391569", nama: "HANY DAVID TOBIAS", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "6 April 2006",kelas: "XII TKR B"},
+            "4685": {nisn: "0079071353", nama: "JIBRIL ADNAN KHUSHOYA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39106",kelas: "XII TKR B"},
+            "4686": {nisn: "0073175077", nama: "JUNIAN ANUGRAH PRIANGGA", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39257",kelas: "XII TKR B"},
+            "4687": {nisn: "0063427693", nama: "KHOERUL UMAM", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "10 Nopember 2006",kelas: "XII TKR B"},
+            "4688": {nisn: "0068666351", nama: "KURNIA DHANI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "4 Oktober 2005",kelas: "XII TKR B"},
+            "4689": {nisn: "0067689118", nama: "MAULANI CHUSNA ALIMAH", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "38855",kelas: "XII TKR B"},
+            "4690": {nisn: "0051563079", nama: "MAYLIEN SHASHA ANANTA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "38499",kelas: "XII TKR B"},
+            "4691": {nisn: "0076220782", nama: "MUHAMAD NURFAQIH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39223",kelas: "XII TKR B"},
+            "4692": {nisn: "0075424944", nama: "MUHAMMAD MALIKUL HUSAINI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39135",kelas: "XII TKR B"},
+            "4693": {nisn: "0059096384", nama: "NADHIKA NAUFAL RADITYA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "2005-02-09",kelas: "XII TKR B"},
+            "4694": {nisn: "0071091391", nama: "NIKO DWI ANDIKA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39156",kelas: "XII TKR B"},
+            "4695": {nisn: "0062437324", nama: "RAFI ARIFFUDIN", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39070",kelas: "XII TKR B"},
+            "4696": {nisn: "0075858481", nama: "RASSYA MALIKA PRATAMA", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39354",kelas: "XII TKR B"},
+            "4697": {nisn: "0088316403", nama: "REGITA SYIFA AZZAHRA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39624",kelas: "XII TKR B"},
+            "4698": {nisn: "0072485833", nama: "RIZKA ABILIO JANUAR", tempatLahir: "JAKARTA", kelamin: "L", tanggalLahir: "39098",kelas: "XII TKR B"},
+            "4699": {nisn: "0073163252", nama: "RIZKI KHOERUL AZIZ", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39290",kelas: "XII TKR B"},
+            "4700": {nisn: "0075160099", nama: "ROFI'UDIN AL MUSOFFA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39340",kelas: "XII TKR B"},
+            "4701": {nisn: "3078972278", nama: "SATRIA ADI PUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39443",kelas: "XII TKR B"},
+            "4702": {nisn: "0071755492", nama: "SATYA IKHSAN MAULANA", tempatLahir: "WONOSOBO", kelamin: "L", tanggalLahir: "3 Agustus 2007",kelas: "XII TKR B"},
+            "4703": {nisn: "0074453489", nama: "SETPEVENT PRANURYA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39097",kelas: "XII TKR B"},
+            "4704": {nisn: "0077229963", nama: "SRI REZKY LESTARI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39343",kelas: "XII TKR B"},
+            "4705": {nisn: "0058953404", nama: "SUGENG SUMARDI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38467",kelas: "XII TKR B"},
+            "4706": {nisn: "0072616766", nama: "SUGIYANTO SETIADI", tempatLahir: "CIMAHI", kelamin: "L", tanggalLahir: "39092",kelas: "XII TKR B"},
+            "4707": {nisn: "0071635577", nama: "SUSI NUR AZIZAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39248",kelas: "XII TKR B"},
+            "4708": {nisn: "0079774824", nama: "YEFIKA AISY", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39435",kelas: "XII TKR B"},
+            "4709": {nisn: "0069689395", nama: "YUSUF FIKRIYANTO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39080",kelas: "XII TKR B"},
+            "4710": {nisn: "0073768800", nama: "ADITYA NANDA PRATAMA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39322",kelas: "XII TKR C"},
+            "4711": {nisn: "0075658957", nama: "ALIF JUNAEDIN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39217",kelas: "XII TKR C"},
+            "4712": {nisn: "0079251035", nama: "ANANDA LEO PRATAMA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39312",kelas: "XII TKR C"},
+            "4713": {nisn: "0076096716", nama: "ARYA PRADANA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39188",kelas: "XII TKR C"},
+            "4714": {nisn: "0066009946", nama: "AZKA RAMADANI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39002",kelas: "XII TKR C"},
+            "4715": {nisn: "0078519813", nama: "BAGAS FIRMANSYAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39108",kelas: "XII TKR C"},
+            "4716": {nisn: "0037076960", nama: "DAFA RIZIQ", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38640",kelas: "XII TKR C"},
+            "4717": {nisn: "0076794779", nama: "DAFFA ADISTA ALFAREZI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39274",kelas: "XII TKR C"},
+            "4718": {nisn: "0072524131", nama: "DANANG AJI PUTRA PRATAMA", tempatLahir: "BATU TUNAU", kelamin: "L", tanggalLahir: "2 Juni 2007",kelas: "XII TKR C"},
+            "4719": {nisn: "0061888884", nama: "DHIYA 'IQBAL MU'AFFIY", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "9 September 2006",kelas: "XII TKR C"},
+            "4720": {nisn: "0063942388", nama: "DIAN SAWITRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "38818",kelas: "XII TKR C"},
+            "4721": {nisn: "0069562618", nama: "DIMAS PUJIANTO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "6 Desember 2006",kelas: "XII TKR C"},
+            "4722": {nisn: "0063214969", nama: "FAHRIZA SEPTIANTO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "9 September 2006",kelas: "XII TKR C"},
+            "4723": {nisn: "0063657869", nama: "FANDI EKA PRASTIYO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "6 April 2007",kelas: "XII TKR C"},
+            "4724": {nisn: "0075068311", nama: "FELA HANITA", tempatLahir: "BANYUMAS", kelamin: "P", tanggalLahir: "6 September 2007",kelas: "XII TKR C"},
+            "4725": {nisn: "0064717649", nama: "FERDI YULIANTO", tempatLahir: "KOTA WARINGIN TIMUR", kelamin: "L", tanggalLahir: "38924",kelas: "XII TKR C"},
+            "4726": {nisn: "0078615207", nama: "FERRY KURNIAWAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "8 Desember 2007",kelas: "XII TKR C"},
+            "4727": {nisn: "0088636619", nama: "FITRI SETIANA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39720",kelas: "XII TKR C"},
+            "4728": {nisn: "0062787759", nama: "IMAM SAFINGI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39070",kelas: "XII TKR C"},
+            "4729": {nisn: "0079951415", nama: "INTAN ARLIN VALENTINA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "7 Pebruari 2007",kelas: "XII TKR C"},
+            "4730": {nisn: "0072968668", nama: "LINTANG NURDIANSYAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39223",kelas: "XII TKR C"},
+            "4731": {nisn: "0078182157", nama: "LUTFIE ARSYAD RESWARI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39212",kelas: "XII TKR C"},
+            "4732": {nisn: "0077493513", nama: "MUHAMMAD ADITYA FAJRIL", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39192",kelas: "XII TKR C"},
+            "4733": {nisn: "0065064805", nama: "NAUFAL RAFIF PRATAMA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38878",kelas: "XII TKR C"},
+            "4734": {nisn: "0077000817", nama: "NURUL KHAMIDA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39226",kelas: "XII TKR C"},
+            "4735": {nisn: "0074949793", nama: "OKTAVIA SAFITRI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39368",kelas: "XII TKR C"},
+            "4736": {nisn: "0068821585", nama: "PANDU", tempatLahir: "JAKARTA", kelamin: "L", tanggalLahir: "3  Agustus 2006",kelas: "XII TKR C"},
+            "4737": {nisn: "0075458222", nama: "RESTU SAPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "6 Januari 2007",kelas: "XII TKR C"},
+            "4738": {nisn: "0079367683", nama: "RICCO ALFANDI", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39228",kelas: "XII TKR C"},
+            "4739": {nisn: "0078459270", nama: "RIDHO FIRMANSYAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "9 Pebruari 2007",kelas: "XII TKR C"},
+            "4740": {nisn: "0067936283", nama: "RIZKI OKTA ROMADLON", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39006",kelas: "XII TKR C"},
+            "4741": {nisn: "0074688623", nama: "SENDY FARIS `ALWANI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39248",kelas: "XII TKR C"},
+            "4742": {nisn: "0078784100", nama: "SETYA BUDIMAN", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39261",kelas: "XII TKR C"},
+            "4743": {nisn: "0063277991", nama: "SYIFA BAEHAQI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "7 Nopember 2006",kelas: "XII TKR C"},
+            "4744": {nisn: "0069468125", nama: "YOGI FERDIANSYAH", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "38882",kelas: "XII TKR C"},
+            "4745": {nisn: "0077593203", nama: "YULIANA DEWI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "7 Juli 2007",kelas: "XII TKR C"},
+            "4746": {nisn: "0052752595", nama: "ADI DWI RIZKI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "21 Nopember 2005",kelas: "XII TSM A"},
+            "4747": {nisn: "0071969301", nama: "ADITHYA CAHYA RAMADHANI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39347",kelas: "XII TSM A"},
+            "4748": {nisn: "0077631485", nama: "ADITYA WAHYU NUGRAHA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39216",kelas: "XII TSM A"},
+            "4749": {nisn: "0078323604", nama: "ARRUM MIYUNINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39367",kelas: "XII TSM A"},
+            "4750": {nisn: "0074174174", nama: "BAGAS NIKO SEBASTIAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "1 Februari 2007",kelas: "XII TSM A"},
+            "4751": {nisn: "3089054858", nama: "DITA MELINA", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "3 Mei 2008",kelas: "XII TSM A"},
+            "4752": {nisn: "0065826079", nama: "DWI FAJAR SAPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39258",kelas: "XII TSM A"},
+            "4753": {nisn: "0068753797", nama: "ELFAN ARDIANZAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39002",kelas: "XII TSM A"},
+            "4754": {nisn: "0078827319", nama: "ELLEN DIKA IRAWAN", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39200",kelas: "XII TSM A"},
+            "4755": {nisn: "0076323816", nama: "ERLINA ALIIFATUL KHOIRIYYAH", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39324",kelas: "XII TSM A"},
+            "4756": {nisn: "0079011198", nama: "FAHYU HIDAYAT", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "18 Pebruari 2007",kelas: "XII TSM A"},
+            "4757": {nisn: "0078695080", nama: "FAJAR PUTRA PRATAMA", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "22 Nopember 2007",kelas: "XII TSM A"},
+            "4758": {nisn: "0077566362", nama: "FAREL AHMAD FAOZI", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "4 April 2007",kelas: "XII TSM A"},
+            "4759": {nisn: "0075106137", nama: "FEBRYAN PANDU PRATAMA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "4 Pebruari 2007",kelas: "XII TSM A"},
+            "4760": {nisn: "0072889866", nama: "GALIH SAPUTRA", tempatLahir: "GROBOGAN", kelamin: "L", tanggalLahir: "15 Nopember 2007",kelas: "XII TSM A"},
+            "4761": {nisn: "0074950653", nama: "IKSHAN TAUFIQURAHMAN", tempatLahir: "GARUT", kelamin: "L", tanggalLahir: "39433",kelas: "XII TSM A"},
+            "4762": {nisn: "0073339260", nama: "KHALYD SETYA AL'MANAF", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "5 Januari 2007",kelas: "XII TSM A"},
+            "4763": {nisn: "0071378193", nama: "MELITA RISTAYANTI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39225",kelas: "XII TSM A"},
+            "4764": {nisn: "0068322689", nama: "MU'AMAR QADAFI AL FAQIH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39680",kelas: "XII TSM A"},
+            "4765": {nisn: "0071704249", nama: "MUHAMAD RIDWAN MAULIDY", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39185",kelas: "XII TSM A"},
+            "4766": {nisn: "0077528233", nama: "NEZZA EKA PRAMESTI", tempatLahir: "NGANJUK", kelamin: "P", tanggalLahir: "4 Juli 2007",kelas: "XII TSM A"},
+            "4767": {nisn: "0069394820", nama: "NUR HIDAYAT", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39063",kelas: "XII TSM A"},
+            "4768": {nisn: "0076066729", nama: "PUTRI NINGSIH RAHAYU", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "6 Mei 2007",kelas: "XII TSM A"},
+            "4769": {nisn: "0071841128", nama: "RANGGA WAHYU DARMAWAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39375",kelas: "XII TSM A"},
+            "4770": {nisn: "0088863456", nama: "RESIA WAHYUDI FIRMANSYAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39610",kelas: "XII TSM A"},
+            "4771": {nisn: "0067805674", nama: "RESTU RAMADHANI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39006",kelas: "XII TSM A"},
+            "4772": {nisn: "0068941389", nama: "RIKOI FERDI PUTRA PRATAMA", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "38922",kelas: "XII TSM A"},
+            "4773": {nisn: "0075892905", nama: "RIZAL EKA FAJRI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39167",kelas: "XII TSM A"},
+            "4774": {nisn: "0074852010", nama: "ROBI FATKHUR ROBANI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39281",kelas: "XII TSM A"},
+            "4775": {nisn: "0059743064", nama: "RUDI PRAMONO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38493",kelas: "XII TSM A"},
+            "4776": {nisn: "0086968288", nama: "SALSA DIYANA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "1 Mei 2008",kelas: "XII TSM A"},
+            "4777": {nisn: "0078806553", nama: "SHEREL FRIDATAMA AULIA PUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39227",kelas: "XII TSM A"},
+            "4778": {nisn: "0071271833", nama: "SINTIANA SAPUTRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "7 Maret 2007",kelas: "XII TSM A"},
+            "4779": {nisn: "0032404294", nama: "TRI SAHLI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "8 JANUARI 2006",kelas: "XII TSM A"},
+            "4780": {nisn: "0076409438", nama: "ZAENAL SOLEHUDIN", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "1 Januari 2007",kelas: "XII TSM A"},
+            "4781": {nisn: "0077072044", nama: "ZIDAN KHOERUL PRASETYO", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "5 Pebruari 2007",kelas: "XII TSM A"},
+            "4782": {nisn: "0066028356", nama: "ACHMAD AMIRUL KHAFIDZ", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "27 Nopember 2006",kelas: "XII TSM B"},
+            "4783": {nisn: "0066594344", nama: "ADI WAHYU SAPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38831",kelas: "XII TSM B"},
+            "4784": {nisn: "0072590441", nama: "ADITYA GALUH DIMAS PRAYOGA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39229",kelas: "XII TSM B"},
+            "4785": {nisn: "3073390847", nama: "AHMAD NURHASIM", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39216",kelas: "XII TSM B"},
+            "4786": {nisn: "0071311879", nama: "ALIF MAULANA", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "5 Maret 2007",kelas: "XII TSM B"},
+            "4787": {nisn: "0052494877", nama: "AMANINA SALSABILA", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "38545",kelas: "XII TSM B"},
+            "4788": {nisn: "0078483406", nama: "AMIN TONIYOGA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39444",kelas: "XII TSM B"},
+            "4789": {nisn: "0081965886", nama: "ARIEF KURNIAWAN", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "1 Mei 2007",kelas: "XII TSM B"},
+            "4790": {nisn: "0073684549", nama: "ARJU NAJIHAN", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39427",kelas: "XII TSM B"},
+            "4791": {nisn: "0076622034", nama: "ARYA DWI PANGGA", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39283",kelas: "XII TSM B"},
+            "4792": {nisn: "0067617855", nama: "CHAERUL ANAM", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38774",kelas: "XII TSM B"},
+            "4793": {nisn: "0073959868", nama: "FADHLIL FATIH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39110",kelas: "XII TSM B"},
+            "4794": {nisn: "0076656539", nama: "FAJAR ISMAIL", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39275",kelas: "XII TSM B"},
+            "4795": {nisn: "0067798663", nama: "FIRDAUS ANDRA SYAHPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39066",kelas: "XII TSM B"},
+            "4796": {nisn: "0087214489", nama: "INDRA FIRMANSYAH", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39537",kelas: "XII TSM B"},
+            "4797": {nisn: "0063366621", nama: "LATIFAHUL ILMI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "13 Nopember 2006",kelas: "XII TSM B"},
+            "4798": {nisn: "0077435508", nama: "MEININDA HIKMAH SAFITRI", tempatLahir: "ROKAN HULU", kelamin: "P", tanggalLahir: "39225",kelas: "XII TSM B"},
+            "4799": {nisn: "0071157031", nama: "MOHAMMAD IKMALUN NAJAH", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39138",kelas: "XII TSM B"},
+            "4800": {nisn: "0075815457", nama: "MUHAMAD DIMAS SAPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "3 Pebruari 2007",kelas: "XII TSM B"},
+            "4801": {nisn: "0072996659", nama: "MUHAMAD TABRONI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39092",kelas: "XII TSM B"},
+            "4802": {nisn: "0073925697", nama: "NANDA FAIZAL SHIDIQ", tempatLahir: "BREBES", kelamin: "L", tanggalLahir: "23 Pebruari 2007",kelas: "XII TSM B"},
+            "4803": {nisn: "0051592896", nama: "PURWANTO", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "8 Oktober 2005",kelas: "XII TSM B"},
+            "4804": {nisn: "0061992345", nama: "RACHMAN BURHANUDIN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39081",kelas: "XII TSM B"},
+            "4805": {nisn: "0069679029", nama: "RENDHIKA IRFANSYAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39020",kelas: "XII TSM B"},
+            "4806": {nisn: "0082954985", nama: "RESYA ADELIA DWI SAPUTRI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39462",kelas: "XII TSM B"},
+            "4807": {nisn: "0078432614", nama: "RIDWAN SYARIF", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39104",kelas: "XII TSM B"},
+            "4808": {nisn: "0063533918", nama: "RISKI SETIO PURNOMO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38971",kelas: "XII TSM B"},
+            "4809": {nisn: "0074049469", nama: "ROYAN SAPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39219",kelas: "XII TSM B"},
+            "4810": {nisn: "0077421710", nama: "SEPHI AYU RAMA DANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39349",kelas: "XII TSM B"},
+            "4811": {nisn: "0071333128", nama: "SINTA FEBRIANA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "13 Pebruari 2007",kelas: "XII TSM B"},
+            "4812": {nisn: "0079617435", nama: "SUCI AMELIA CITRA GINARSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39158",kelas: "XII TSM B"},
+            "4813": {nisn: "0061516331", nama: "TALITHA NUR'AINI RAMADHANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "38863",kelas: "XII TSM B"},
+            "4814": {nisn: "0068432281", nama: "WAHRUL TRI ATMOKO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38789",kelas: "XII TSM B"},
+            "4815": {nisn: "0078267078", nama: "WAHYU BAGAS PRADANA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39307",kelas: "XII TSM B"},
+            "4816": {nisn: "0052978796", nama: "WAHYU BAGUS SAPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "4 Agustus 2005",kelas: "XII TSM B"},
+            "4817": {nisn: "0071938615", nama: "WANDIRA LETITIA SARI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "7 April 2007",kelas: "XII TSM B"},
+            "4818": {nisn: "0065798795", nama: "ACHMAD UMARUL KHUFADZ", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "27 Nopember 2006",kelas: "XII TSM C"},
+            "4819": {nisn: "0077820841", nama: "ADE NANDA SAPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39429",kelas: "XII TSM C"},
+            "4820": {nisn: "0075946907", nama: "ADIKTA RAGIL SAPUTRA", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39273",kelas: "XII TSM C"},
+            "4821": {nisn: "0077552065", nama: "ARIF SETIADI ATMAJA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "8 Mei 2007",kelas: "XII TSM C"},
+            "4822": {nisn: "0077916948", nama: "BAGUS PAMUNGKAS", tempatLahir: "BEKASI", kelamin: "L", tanggalLahir: "9 September 2007",kelas: "XII TSM C"},
+            "4823": {nisn: "0075779832", nama: "BIMO PRAKOSO", tempatLahir: "Madiun", kelamin: "L", tanggalLahir: "3 November 2007",kelas: "XII TSM C"},
+            "4824": {nisn: "0062400724", nama: "CANDRA SAPUTRA", tempatLahir: "TANGERANG", kelamin: "L", tanggalLahir: "1 Mei 2006",kelas: "XII TSM C"},
+            "4825": {nisn: "0075223077", nama: "CATUR SETIYA BUDI", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39094",kelas: "XII TSM C"},
+            "4826": {nisn: "0078210414", nama: "CICI FIDIYANTI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39137",kelas: "XII TSM C"},
+            "4827": {nisn: "0051929692", nama: "DARSO ARDO WARDOYO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38583",kelas: "XII TSM C"},
+            "4829": {nisn: "0075541977", nama: "DINI RIYANTI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "4 April 2007",kelas: "XII TSM C"},
+            "4830": {nisn: "0069692398", nama: "EKA APRILIA NUROHMAH", tempatLahir: "Tangerang", kelamin: "P", tanggalLahir: "38836",kelas: "XII TSM C"},
+            "4831": {nisn: "0061162368", nama: "FADHIL ADZKIA AS SYAHRI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "6 Mei 2006",kelas: "XII TSM C"},
+            "4832": {nisn: "0076901481", nama: "FEBRI CATUR NUGROHO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "7 Pebruari 2007",kelas: "XII TSM C"},
+            "4833": {nisn: "0065615941", nama: "HANGGER OKTAVIAN MARGIANSYAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39021",kelas: "XII TSM C"},
+            "4834": {nisn: "0072010584", nama: "IFAN ANTONI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39273",kelas: "XII TSM C"},
+            "4835": {nisn: "0063341854", nama: "KHOERUL AKMAL", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "9 Mei 2006",kelas: "XII TSM C"},
+            "4836": {nisn: "0072962959", nama: "KOESUMA JATI MAULANA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39444",kelas: "XII TSM C"},
+            "4837": {nisn: "0077060961", nama: "MIKO RAHMA ARDIANSYAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39319",kelas: "XII TSM C"},
+            "4838": {nisn: "0073516981", nama: "MISBAHUL ULUM", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "4 Juli 2007",kelas: "XII TSM C"},
+            "4839": {nisn: "0069543328", nama: "NANDA DWI ARYATI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "4 November 2006",kelas: "XII TSM C"},
+            "4840": {nisn: "0061416994", nama: "NASILA PUTRI APRILIANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "38820",kelas: "XII TSM C"},
+            "4841": {nisn: "0073114251", nama: "NGIMRO'AH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39106",kelas: "XII TSM C"},
+            "4842": {nisn: "0065011678", nama: "NUH WAHYU", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38377",kelas: "XII TSM C"},
+            "4843": {nisn: "0073292677", nama: "RAJRADITYA NOVAL", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39414",kelas: "XII TSM C"},
+            "4844": {nisn: "0082441853", nama: "RAYHAN FADILLAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39534",kelas: "XII TSM C"},
+            "4845": {nisn: "0071829866", nama: "RENI MELINA", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39197",kelas: "XII TSM C"},
+            "4846": {nisn: "0071888820", nama: "RINANSYAH DWI BAGASKORO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "8 Agustus 2007",kelas: "XII TSM C"},
+            "4847": {nisn: "0065235736", nama: "RIYANTO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38743",kelas: "XII TSM C"},
+            "4848": {nisn: "0079565175", nama: "RIZKIA NIHAYAH PUTRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39225",kelas: "XII TSM C"},
+            "4849": {nisn: "0078690744", nama: "SUBASTIYAN DWI CAHYONO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "9 Mei 2007",kelas: "XII TSM C"},
+            "4850": {nisn: "0075501582", nama: "TAHTA BANGKIT ADIK SHEFRIDHO", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39225",kelas: "XII TSM C"},
+            "4851": {nisn: "0072622218", nama: "YOHANES JULIO MOER", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "4 Juli 2007",kelas: "XII TSM C"},
+            "4852": {nisn: "0067848726", nama: "YUAN ARI HIDAYAT", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39255",kelas: "XII TSM C"},
+            "4853": {nisn: "0075571090", nama: "ZAIN SULFANI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39111",kelas: "XII TSM C"},
+            "4854": {nisn: "0064067779", nama: "ADINDA TRI AGUSTINA", tempatLahir: "KARANGANYAR", kelamin: "P", tanggalLahir: "8  Agustus 2006",kelas: "XII DKV A"},
+            "4855": {nisn: "0079132415", nama: "AFI JULI ASTUTI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39277",kelas: "XII DKV A"},
+            "4856": {nisn: "0071930094", nama: "AISYAH RAHMAWULAN SARI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39281",kelas: "XII DKV A"},
+            "4857": {nisn: "0075393910", nama: "AMMRU ROJULUS SIDIQ", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39273",kelas: "XII DKV A"},
+            "4858": {nisn: "0078802584", nama: "ANISA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39371",kelas: "XII DKV A"},
+            "4859": {nisn: "0077482850", nama: "ANITA AMALIA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "3 Mei 2007",kelas: "XII DKV A"},
+            "4860": {nisn: "0076542944", nama: "AULIA FARIDA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39215",kelas: "XII DKV A"},
+            "4861": {nisn: "0078349147", nama: "BUNGA KHOIRUNISA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "1 Mei 2007",kelas: "XII DKV A"},
+            "4862": {nisn: "0078229393", nama: "CARENDITA SALSA FAHRELI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "27 Pebruari 2007",kelas: "XII DKV A"},
+            "4863": {nisn: "0072330481", nama: "DELLA NUR ALIFAH", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39429",kelas: "XII DKV A"},
+            "4864": {nisn: "0075647638", nama: "DENIS SAFITRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39095",kelas: "XII DKV A"},
+            "4865": {nisn: "0068358549", nama: "ERLINA HELVY RAHMADHANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "38981",kelas: "XII DKV A"},
+            "4866": {nisn: "0074520465", nama: "ESTU PUTERA NEGARA PURWANTO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39445",kelas: "XII DKV A"},
+            "4867": {nisn: "0075414621", nama: "FITA SUBEKTI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39108",kelas: "XII DKV A"},
+            "4868": {nisn: "0074328246", nama: "HAFSO TUSSOLIKHAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39366",kelas: "XII DKV A"},
+            "4869": {nisn: "0073281521", nama: "INDRI KURNIAWATI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39094",kelas: "XII DKV A"},
+            "4870": {nisn: "0075367089", nama: "IQBAL DARMAWAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39291",kelas: "XII DKV A"},
+            "4871": {nisn: "0078136930", nama: "JULIA IKA SAPUTRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39289",kelas: "XII DKV A"},
+            "4872": {nisn: "0071496412", nama: "KEYSHA NANDA DWIANTI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "4 Desember 2007",kelas: "XII DKV A"},
+            "4873": {nisn: "0072039812", nama: "LITA AMANDA BELLA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39202",kelas: "XII DKV A"},
+            "4874": {nisn: "0076550551", nama: "MEI APRILIA", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39226",kelas: "XII DKV A"},
+            "4875": {nisn: "0087185260", nama: "MUHAMMAD ZAKI", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39586",kelas: "XII DKV A"},
+            "4876": {nisn: "0077949449", nama: "NATAZYA DIAH CHOERIYAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39320",kelas: "XII DKV A"},
+            "4877": {nisn: "0074796667", nama: "NAYLA KHOIRININGTYAS", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "9  Mei 2007",kelas: "XII DKV A"},
+            "4878": {nisn: "0073901426", nama: "NONI MEIDINA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39226",kelas: "XII DKV A"},
+            "4879": {nisn: "0071423048", nama: "OLIVIA ROS MEILINA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39214",kelas: "XII DKV A"},
+            "4880": {nisn: "0075583852", nama: "QAILA PUTRI RAMADHANI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39366",kelas: "XII DKV A"},
+            "4881": {nisn: "0077442398", nama: "RIZKIA NURANNISA", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "3 Juni 2007",kelas: "XII DKV A"},
+            "4882": {nisn: "0075111924", nama: "SARI RETIYA NINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39170",kelas: "XII DKV A"},
+            "4883": {nisn: "0064663060", nama: "SHELANI FATIKHAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39067",kelas: "XII DKV A"},
+            "4884": {nisn: "0072737676", nama: "TYAS PUSPITA SARI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "7 Desember 2007",kelas: "XII DKV A"},
+            "4885": {nisn: "0074233729", nama: "VALENTINA KHOIRUNNISA JASMINE", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "14 Pebruari 2007",kelas: "XII DKV A"},
+            "4886": {nisn: "0065077443", nama: "WIDYA PANGESTIKA GUNAWAN", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "38947",kelas: "XII DKV A"},
+            "4887": {nisn: "0073050000", nama: "WINDRI ASTUTI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39164",kelas: "XII DKV A"},
+            "4888": {nisn: "0077433351", nama: "ZALFANI LISTYA DEWI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39187",kelas: "XII DKV A"},
+            "4889": {nisn: "0074825153", nama: "ZASKYA ANANDA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39288",kelas: "XII DKV A"},
+            "4890": {nisn: "0074295079", nama: "ADYTIA MAULANA PUTRA", tempatLahir: "SUMEDANG", kelamin: "L", tanggalLahir: "2 Mei 2007",kelas: "XII DKV B"},
+            "4891": {nisn: "0065613222", nama: "AGNIA HANUM KIRANIA PUTRI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "6 Desember 2006",kelas: "XII DKV B"},
+            "4892": {nisn: "0077274007", nama: "ALFARA AGUSTINA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "9 Agustus 2007",kelas: "XII DKV B"},
+            "4893": {nisn: "0075353728", nama: "ALIFIYAH MAHARANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "11 Pebruari 2007",kelas: "XII DKV B"},
+            "4894": {nisn: "0076475951", nama: "ANA KARLININA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39158",kelas: "XII DKV B"},
+            "4895": {nisn: "0076501160", nama: "ANNISA NUR ROHMAH", tempatLahir: "SORONG", kelamin: "P", tanggalLahir: "39400",kelas: "XII DKV B"},
+            "4896": {nisn: "0063863970", nama: "ARINA RIZKA AULIA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39062",kelas: "XII DKV B"},
+            "4897": {nisn: "0076625391", nama: "ARINI SAGITA RIZKA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39306",kelas: "XII DKV B"},
+            "4898": {nisn: "0075114287", nama: "ASRI FEBRIYANTI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "24 Pebruari 2007",kelas: "XII DKV B"},
+            "4899": {nisn: "0077218333", nama: "CHOLIFAH SATRIA PINANDHITA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39197",kelas: "XII DKV B"},
+            "4900": {nisn: "0014621849", nama: "DEWI YULIARSIH", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "8 Juli 2007",kelas: "XII DKV B"},
+            "4901": {nisn: "0089434825", nama: "DIANDRA PUTRA PERDANA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "7 Mei 2008",kelas: "XII DKV B"},
+            "4902": {nisn: "0076255424", nama: "DINI FITRIANI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39368",kelas: "XII DKV B"},
+            "4903": {nisn: "0075123086", nama: "EKA AYU ANASTASIA", tempatLahir: "SURABAYA", kelamin: "P", tanggalLahir: "6 Agustus 2007",kelas: "XII DKV B"},
+            "4904": {nisn: "0069520359", nama: "ENI SEPTIANINGRUM", tempatLahir: "SAMPIT", kelamin: "P", tanggalLahir: "2 September 2006",kelas: "XII DKV B"},
+            "4905": {nisn: "0076237887", nama: "ERIC ADITYA HARIYANTO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39283",kelas: "XII DKV B"},
+            "4906": {nisn: "0079411113", nama: "IQNA NATASYA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "9 September 2007",kelas: "XII DKV B"},
+            "4907": {nisn: "0084421024", nama: "KHANAFI ALI NUGROHO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39473",kelas: "XII DKV B"},
+            "4908": {nisn: "0065610082", nama: "KHARINA DWI SAPUTRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39082",kelas: "XII DKV B"},
+            "4909": {nisn: "0067129247", nama: "KIFARATUL WIWIK WIDAYANTI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "9 Nopember 2006",kelas: "XII DKV B"},
+            "4910": {nisn: "0061876307", nama: "LURIYAH NURAINI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39065",kelas: "XII DKV B"},
+            "4911": {nisn: "0075113674", nama: "MULIA KUSUMAWATI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39311",kelas: "XII DKV B"},
+            "4912": {nisn: "0084965647", nama: "NAYLA AGNIA WIGATI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "6 Maret 2008",kelas: "XII DKV B"},
+            "4913": {nisn: "0069674224", nama: "NIMAS ANGGITA WAHYU LESTARI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "38955",kelas: "XII DKV B"},
+            "4914": {nisn: "0076316277", nama: "QUEENA SASKIA MAHARANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "4 Juni 2007",kelas: "XII DKV B"},
+            "4915": {nisn: "0069451841", nama: "RAHAYU SETYANINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39063",kelas: "XII DKV B"},
+            "4916": {nisn: "0072620343", nama: "RESTALINA ANINDHITA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39231",kelas: "XII DKV B"},
+            "4917": {nisn: "0075186716", nama: "RILLIAN ARLEA ERLANDA", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39155",kelas: "XII DKV B"},
+            "4918": {nisn: "0071945362", nama: "RIZKA ULIN NIHAYAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39183",kelas: "XII DKV B"},
+            "4919": {nisn: "0074297823", nama: "SAFINATUZ ZAHRA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39212",kelas: "XII DKV B"},
+            "4920": {nisn: "0078376267", nama: "SANTI JAYA WIGUNA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39100",kelas: "XII DKV B"},
+            "4921": {nisn: "0071982908", nama: "SULIS SETIANINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "3 Januari 2007",kelas: "XII DKV B"},
+            "4922": {nisn: "0076887191", nama: "SYIFA ISLAMIYATI RAHMATILLAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "8 Januari 2007",kelas: "XII DKV B"},
+            "4923": {nisn: "0069204135", nama: "USWATUN HASANAH", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39082",kelas: "XII DKV B"},
+            "4924": {nisn: "0073416091", nama: "ZAHRA APRILIYANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "7 April 2007",kelas: "XII DKV B"},
+            "4925": {nisn: "0076855700", nama: "ZAHRA MAY SALSABILA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39228",kelas: "XII DKV B"},
+            "4926": {nisn: "0076241755", nama: "AISYA MAYLAFFAIZA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39214",kelas: "XII DKV C"},
+            "4927": {nisn: "0062112358", nama: "AJI ANOM SUDIBYO", tempatLahir: "Purworejo", kelamin: "L", tanggalLahir: "39073",kelas: "XII DKV C"},
+            "4928": {nisn: "0089137117", nama: "ANGELINA RAHMANA DIA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39567",kelas: "XII DKV C"},
+            "4929": {nisn: "0073299813", nama: "ANISA BANI PRATAMA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39233",kelas: "XII DKV C"},
+            "4930": {nisn: "0071470519", nama: "ASYFA UZAHRA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39323",kelas: "XII DKV C"},
+            "4931": {nisn: "0077242470", nama: "ATSANI HAIZA EL AMALI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39259",kelas: "XII DKV C"},
+            "4932": {nisn: "0064366885", nama: "DINA KUSUMA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39076",kelas: "XII DKV C"},
+            "4933": {nisn: "0075840236", nama: "DINDA ZELIKA MUTHI FRIDA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39262",kelas: "XII DKV C"},
+            "4934": {nisn: "0061304931", nama: "EFTI OKTAVIYA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "2 Oktober 2006",kelas: "XII DKV C"},
+            "4935": {nisn: "0076841629", nama: "ELI PARWATI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "3 Maret 2007",kelas: "XII DKV C"},
+            "4936": {nisn: "0072683339", nama: "EMILIA PUTRI RASTANTI", tempatLahir: "BANYUASIN", kelamin: "P", tanggalLahir: "39163",kelas: "XII DKV C"},
+            "4937": {nisn: "0077259662", nama: "ESTRI NOVITA SARI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "27 Nopember 2007",kelas: "XII DKV C"},
+            "4938": {nisn: "0064455331", nama: "ILHAM PUJI SAPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39013",kelas: "XII DKV C"},
+            "4939": {nisn: "0076826611", nama: "INGE FINANDA", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "1 Juli 2007",kelas: "XII DKV C"},
+            "4940": {nisn: "0071567310", nama: "INGGITA EMALIA PUTRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39289",kelas: "XII DKV C"},
+            "4941": {nisn: "0072332591", nama: "IRFAN YANUAR", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39107",kelas: "XII DKV C"},
+            "4942": {nisn: "0075046097", nama: "KHATA MAINETA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "9 Mei 2007",kelas: "XII DKV C"},
+            "4943": {nisn: "0071278031", nama: "KHOERIYAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "6 Maret 2007",kelas: "XII DKV C"},
+            "4944": {nisn: "0068173176", nama: "MARETA SAHRA AGUSTINA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "38803",kelas: "XII DKV C"},
+            "4945": {nisn: "0053722210", nama: "NAZIAH MUJI LESTARI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "38686",kelas: "XII DKV C"},
+            "4946": {nisn: "0062151804", nama: "NUR KHOLIFAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "15 Nopember 2006",kelas: "XII DKV C"},
+            "4947": {nisn: "0073825943", nama: "PANJI KURNIAWAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "9 Pebruari 2007",kelas: "XII DKV C"},
+            "4948": {nisn: "0071934200", nama: "REVI SEPTIANI SUCI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39339",kelas: "XII DKV C"},
+            "4949": {nisn: "0058329585", nama: "RISKA LISTIANA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "38588",kelas: "XII DKV C"},
+            "4950": {nisn: "0074865143", nama: "RIYANTI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "1 Oktober 2007",kelas: "XII DKV C"},
+            "4951": {nisn: "0069167880", nama: "ROSEDIANA OKTAVIA", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39020",kelas: "XII DKV C"},
+            "4952": {nisn: "0079401385", nama: "SELA ASTRI PRATIWI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39110",kelas: "XII DKV C"},
+            "4953": {nisn: "0073558670", nama: "SRI MENTARI BUNGA CINTA SAHRANIDA", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "4 Juli 2007",kelas: "XII DKV C"},
+            "4954": {nisn: "0072294977", nama: "SYIVAH TUNJANAH", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39224",kelas: "XII DKV C"},
+            "4955": {nisn: "0073254330", nama: "TYAS NUR AZIZAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "2 April 2007",kelas: "XII DKV C"},
+            "4956": {nisn: "0077241758", nama: "UMI KHOSINGAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39281",kelas: "XII DKV C"},
+            "4957": {nisn: "0078829873", nama: "WIDYA DHANA MAHESWARI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "2 Maret 2007",kelas: "XII DKV C"},
+            "4958": {nisn: "0074480834", nama: "WISTA RAHMAWATI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39312",kelas: "XII DKV C"},
+            "4959": {nisn: "0062741960", nama: "YULIA NINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39076",kelas: "XII DKV C"},
+            "4960": {nisn: "0079418183", nama: "YULIANA PUJI RAHAYU", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "2 Juli 2007",kelas: "XII DKV C"},
+            "4961": {nisn: "0076228860", nama: "ZHELINA TRI WAHYUNI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39255",kelas: "XII DKV C"},
+            "4962": {nisn: "0074283180", nama: "ADINDA FATIMAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39277",kelas: "XII AN A"},
+            "4963": {nisn: "0076318354", nama: "AISYAH NURLAILA", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "6 Nopember 2007",kelas: "XII AN A"},
+            "4964": {nisn: "0072151045", nama: "ANITA SETIYA NINGSIH", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "9 September 2007",kelas: "XII AN A"},
+            "4965": {nisn: "0074307597", nama: "BINTANG ARISKI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "4 Oktober 2007",kelas: "XII AN A"},
+            "4966": {nisn: "0078166600", nama: "CHUSLIFATUL CHASANAH", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "3 September 2007",kelas: "XII AN A"},
+            "4967": {nisn: "0079261958", nama: "DAVIT FAJAR ROMADON", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39354",kelas: "XII AN A"},
+            "4968": {nisn: "0067942863", nama: "DESI WAHYU TRI LESTARI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39079",kelas: "XII AN A"},
+            "4969": {nisn: "0078800994", nama: "DEWI WULAN SARI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "7 Juli 2007",kelas: "XII AN A"},
+            "4970": {nisn: "0073840927", nama: "DWI ROHYATI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "7 Januari 2007",kelas: "XII AN A"},
+            "4971": {nisn: "0074802167", nama: "FANI FADILA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "6 Januari 2007",kelas: "XII AN A"},
+            "4972": {nisn: "0072885669", nama: "FEBRIYANTI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "6 Februari 2007",kelas: "XII AN A"},
+            "4973": {nisn: "0074080850", nama: "FINA A'ZIZAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39184",kelas: "XII AN A"},
+            "4974": {nisn: "0069029511", nama: "FITROTUN AMALIN AISAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "2 Agustus 2006",kelas: "XII AN A"},
+            "4975": {nisn: "0079613291", nama: "ISNA LAILA BESTIYANA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39199",kelas: "XII AN A"},
+            "4976": {nisn: "0073986897", nama: "LAELA PUJI ASTUTI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39352",kelas: "XII AN A"},
+            "4977": {nisn: "0067600565", nama: "LYANA FEBIANTI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "5 Februari 2006",kelas: "XII AN A"},
+            "4978": {nisn: "0078625853", nama: "MAULIA NUR HIDAYAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39351",kelas: "XII AN A"},
+            "4979": {nisn: "0064113948", nama: "MOHAMAD BINTANG RAMADANIATUN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "6 Oktober 2006",kelas: "XII AN A"},
+            "4980": {nisn: "0086972375", nama: "MUHAMAD SIDIK KURNIAWAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "1 Februari 2008",kelas: "XII AN A"},
+            "4981": {nisn: "0073300093", nama: "NABILA RIFIANINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39092",kelas: "XII AN A"},
+            "4982": {nisn: "0062882050", nama: "NANDA AYU SEPTIYANI", tempatLahir: "BEKASI", kelamin: "P", tanggalLahir: "39080",kelas: "XII AN A"},
+            "4984": {nisn: "0064599912", nama: "ONI PRETI MEVIANA", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "5 Oktober 2006",kelas: "XII AN A"},
+            "4985": {nisn: "0086561014", nama: "PURWATI NINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39660",kelas: "XII AN A"},
+            "4986": {nisn: "0078552299", nama: "QURROTUL A'YUN", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39216",kelas: "XII AN A"},
+            "4987": {nisn: "0071376027", nama: "RAZYA DIKA SAPUTRA", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39159",kelas: "XII AN A"},
+            "4988": {nisn: "0077104610", nama: "RIFA SABILA AZ ZAHRO", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39193",kelas: "XII AN A"},
+            "4989": {nisn: "0089522539", nama: "RIZKA AMANDA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "4 Mei 2008",kelas: "XII AN A"},
+            "4990": {nisn: "0088547630", nama: "RIZKI MEITANTRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "8 Mei 2008",kelas: "XII AN A"},
+            "4991": {nisn: "0087026933", nama: "ROIFATUL WAFA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "2 April 2008",kelas: "XII AN A"},
+            "4992": {nisn: "0078750895", nama: "SEKAR NOLO RATRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "1 Mei 2007",kelas: "XII AN A"},
+            "4993": {nisn: "0073268690", nama: "SOVIENA DEWI AGUSTINA", tempatLahir: "BANDUNG", kelamin: "P", tanggalLahir: "5 Agustus 2007",kelas: "XII AN A"},
+            "4994": {nisn: "0089845448", nama: "STEVI CAHYA NINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39595",kelas: "XII AN A"},
+            "4995": {nisn: "0073236385", nama: "SYIFA FAUZIYAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "1 September 2007",kelas: "XII AN A"},
+            "4996": {nisn: "0089498261", nama: "TSANIATUN NAFISAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39622",kelas: "XII AN A"},
+            "4997": {nisn: "0089160754", nama: "UMI SHOLIKHAH", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39461",kelas: "XII AN A"},
+            "4998": {nisn: "0072024622", nama: "AINUN SALSABILA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39273",kelas: "XII AN B"},
+            "4999": {nisn: "0082275658", nama: "ANDINA DEWI ROHMATUL HIDAYAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39458",kelas: "XII AN B"},
+            "5000": {nisn: "0072209765", nama: "AULIA NUR SYAHRANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39312",kelas: "XII AN B"},
+            "5001": {nisn: "0056497667", nama: "AYU NOVI SAFITRI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "9 November 2005",kelas: "XII AN B"},
+            "5002": {nisn: "0072357417", nama: "BRILIANA PRITA RIZKIA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "19 Pebruari 2007",kelas: "XII AN B"},
+            "5003": {nisn: "0077545297", nama: "BUNGA LESTARI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39323",kelas: "XII AN B"},
+            "5004": {nisn: "0073253594", nama: "DEA SAFITRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39350",kelas: "XII AN B"},
+            "5006": {nisn: "0064313076", nama: "DHENI SETIAWAN", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "6 Desember 2006",kelas: "XII AN B"},
+            "5007": {nisn: "0051817911", nama: "DWI NOVIAN PURNOMO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "30 Nopember 2005",kelas: "XII AN B"},
+            "5008": {nisn: "0077312727", nama: "EKA AVRILIA RAHAYU", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39200",kelas: "XII AN B"},
+            "5009": {nisn: "0067973503", nama: "ERRICA CAHYATRI ADITYA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "6 Juni 2006",kelas: "XII AN B"},
+            "5010": {nisn: "0068595689", nama: "FAIZJAL FIKRI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "38714",kelas: "XII AN B"},
+            "5011": {nisn: "0138347662", nama: "FARHA NURAZIZAH", tempatLahir: "JAKARTA", kelamin: "P", tanggalLahir: "6 Agustus 2007",kelas: "XII AN B"},
+            "5012": {nisn: "0073297764", nama: "FENDI SETIAWAN", tempatLahir: "Cilacap", kelamin: "L", tanggalLahir: "39408",kelas: "XII AN B"},
+            "5013": {nisn: "0077004616", nama: "GITANTI NUARI RAHMA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39097",kelas: "XII AN B"},
+            "5014": {nisn: "0069177898", nama: "HANUM SASMITA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "38953",kelas: "XII AN B"},
+            "5015": {nisn: "0072306669", nama: "ITSNA NUR KHANIFAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39229",kelas: "XII AN B"},
+            "5016": {nisn: "0071174291", nama: "JESSICA ZAHRA SAPUTRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "5 Nopember 2007",kelas: "XII AN B"},
+            "5017": {nisn: "0073953294", nama: "KHIRANIA ADINDA KENCANA PUTRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "8 September 2007",kelas: "XII AN B"},
+            "5018": {nisn: "0072972794", nama: "LINDA AGESTI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39304",kelas: "XII AN B"},
+            "5019": {nisn: "0074605046", nama: "LITA AGUSTINA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "3 Agustus 2007",kelas: "XII AN B"},
+            "5020": {nisn: "0078964206", nama: "LUTFI AWALIATUL BAIHAQI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "9 September 2007",kelas: "XII AN B"},
+            "5021": {nisn: "0077798120", nama: "MIRANDA DESINAWATI", tempatLahir: "BANDUNG", kelamin: "P", tanggalLahir: "39438",kelas: "XII AN B"},
+            "5022": {nisn: "0074937814", nama: "NATASYA NOVITA ANGGRAENI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39169",kelas: "XII AN B"},
+            "5023": {nisn: "0083606538", nama: "RAHMA IMROATUL MUTINGAH", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "6 April 2008",kelas: "XII AN B"},
+            "5024": {nisn: "0074795181", nama: "RISMA NUR AZIZAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "8 Januari 2007",kelas: "XII AN B"},
+            "5025": {nisn: "0074105832", nama: "ROHAYAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "3 Maret 2007",kelas: "XII AN B"},
+            "5026": {nisn: "0055972872", nama: "ROHHAYANINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "38560",kelas: "XII AN B"},
+            "5027": {nisn: "0075965286", nama: "SISKA WIDI YULIANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "3 Juli 2007",kelas: "XII AN B"},
+            "5028": {nisn: "0077211596", nama: "SOFI SAFITRI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39378",kelas: "XII AN B"},
+            "5029": {nisn: "0075170672", nama: "SOFIANA CHINTYASARI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39307",kelas: "XII AN B"},
+            "5030": {nisn: "0088456472", nama: "YESA DWI APRIYANTI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39566",kelas: "XII AN B"},
+            "5031": {nisn: "0067374262", nama: "ZAHRA DWI QUROTUL AINI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "6 April 2006",kelas: "XII AN B"},
+            "5032": {nisn: "0077459153", nama: "ZAHRA MAY ARINI", tempatLahir: "Cilacap", kelamin: "P", tanggalLahir: "39230",kelas: "XII AN B"},
+            "5033": {nisn: "0071117221", nama: "ZHARA AZIJAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "1 November 2007",kelas: "XII AN B"},
+            "5034": {nisn: "0075393619", nama: "ADE SAIFUL KHOLIB", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "16 JANUARI 2007",kelas: "XII TSM KJ"},
+            "5035": {nisn: "0062353958", nama: "AGUS TRIONO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "27 JULI 2006",kelas: "XII TSM KJ"},
+            "5036": {nisn: "0077873482", nama: "AHMAD ALFI AWALLUDIN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "28 FEBRUARI 2007",kelas: "XII TSM KJ"},
+            "5037": {nisn: "0075672091", nama: "AMBAR SATRIO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39186",kelas: "XII TSM KJ"},
+            "5038": {nisn: "0073906551", nama: "ARDAN PRASTIO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "10 MARET 2007",kelas: "XII TSM KJ"},
+            "5039": {nisn: "0778088938", nama: "DIRLI AJI SAPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "13 MEI 2007",kelas: "XII TSM KJ"},
+            "5040": {nisn: "0079538753", nama: "DIRLIANTO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: " 5 MARET 2007",kelas: "XII TSM KJ"},
+            "5041": {nisn: "0074501103", nama: "ENDI KURNIAWAN YULIANTO", tempatLahir: "KEDIRI", kelamin: "L", tanggalLahir: "12 FEBRUARI 2007",kelas: "XII TSM KJ"},
+            "5042": {nisn: "0075749301", nama: "FAQYH AHMADHANY PUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "5 JULI 2007",kelas: "XII TSM KJ"},
+            "5043": {nisn: "0078312447", nama: "ILHAM HERNAWAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "27 MARET 2007",kelas: "XII TSM KJ"},
+            "5044": {nisn: "0074621166", nama: "IMAM SAIFULLOH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "39187",kelas: "XII TSM KJ"},
+            "5045": {nisn: "0073888935", nama: "IQBAL ROMADON", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "13 OKTOBER 2006",kelas: "XII TSM KJ"},
+            "5046": {nisn: "0057694412", nama: "JEPRI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "28 JUNI 2005",kelas: "XII TSM KJ"},
+            "5048": {nisn: "0056722967", nama: "LEKSI AJI NUGROHO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "17 MEI 2005",kelas: "XII TSM KJ"},
+            "5049": {nisn: "0051315778", nama: "LUSRI SLAMET RIADI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "3 DESEMBER 2005",kelas: "XII TSM KJ"},
+            "5050": {nisn: "0068549009", nama: "MAELANI RIRI DAMAYANTI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "28 MEI 2006",kelas: "XII TSM KJ"},
+            "5051": {nisn: "0071908956", nama: "MOHAMAD ARIF IKBAL", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "4 JANUARI 2007",kelas: "XII TSM KJ"},
+            "5052": {nisn: "0079108408", nama: "MOHAMAD FAISAL", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "25 MEI 2007",kelas: "XII TSM KJ"},
+            "5053": {nisn: "0069608583", nama: "MOHAMAD FAJAR NUR ANANSAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "15 JANUARI 2006",kelas: "XII TSM KJ"},
+            "5054": {nisn: "0062126415", nama: "MUHAMAD TAJUDIN HAFIF", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "30 OKTOBER 2006",kelas: "XII TSM KJ"},
+            "5055": {nisn: "0073197099", nama: "MUSTOFAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "13 JULI 2007",kelas: "XII TSM KJ"},
+            "5056": {nisn: "0082031447", nama: "NAJLA AULIA ADIBAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "21 JANUARI 2008",kelas: "XII TSM KJ"},
+            "5057": {nisn: "0079879189", nama: "NANDA LEO GIRI SAPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "30 MEI 2007",kelas: "XII TSM KJ"},
+            "5058": {nisn: "0071655034", nama: "PANDU SETIAWAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "23 AGUSTUS 2007",kelas: "XII TSM KJ"},
+            "5059": {nisn: "0075275604", nama: "PUTRI WAHYU NINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "14 MARET 2007",kelas: "XII TSM KJ"},
+            "5060": {nisn: "0071185191", nama: "RATNA DEWI MAULANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "29 MEI 2007",kelas: "XII TSM KJ"},
+            "5061": {nisn: "0067064341", nama: "RITA MULYA ASIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "28 NOVEMBER 2006",kelas: "XII TSM KJ"},
+            "5062": {nisn: "0069211338", nama: "RIVALDY RAMADHANI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "18 OKTOBER 2006",kelas: "XII TSM KJ"},
+            "5063": {nisn: "0066161224", nama: "RIZAL PRIYATNA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "4 DESEMBER 2006",kelas: "XII TSM KJ"},
+            "5064": {nisn: "0073719558", nama: "SEFI PREBIANTI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "19 PEBRUARI 2007",kelas: "XII TSM KJ"},
+            "5065": {nisn: "0067070509", nama: "SIGIT AJI PANGESTU", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "13 MARET 2006",kelas: "XII TSM KJ"},
+            "5066": {nisn: "0072893702", nama: "SUCI AMELIA RAHMADANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "11 OKTOBER 2006",kelas: "XII TSM KJ"},
+            "5067": {nisn: "0062285763", nama: "SUGENG RIYADI", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "24 OKTOBER 2006",kelas: "XII TSM KJ"},
+            "5068": {nisn: "0068128702", nama: "WAKYUH BAYU PANGESTU", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "9 MEI 2006",kelas: "XII TSM KJ"},
+            "5069": {nisn: "0071857627", nama: "YESSI AVRIL PRATAMA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "14 APRIL 2007",kelas: "XII TSM KJ"},
+            "5070": {nisn: "0078856016", nama: "ADINDA DEVA RAHMADHANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "10 OKTOBER 2007",kelas: "XII DKV KJ"},
+            "5071": {nisn: "0081702862", nama: "AGUSTINA PRASETYA NINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "21 AGUSTUS 2008",kelas: "XII DKV KJ"},
+            "5072": {nisn: "0084685907", nama: "AISYAH MAHIRA ZISSYALWA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "39562",kelas: "XII DKV KJ"},
+            "5073": {nisn: "0082153742", nama: "ALDI KURNIAWAN SYAH", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "1 PEBRUARI 2008",kelas: "XII DKV KJ"},
+            "5074": {nisn: "0077095692", nama: "ALFI KHOIRIYAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "27 JULI 2007",kelas: "XII DKV KJ"},
+            "5075": {nisn: "0086434948", nama: "BOBY FEBRIYAN", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "2 PEBRUARI 2008",kelas: "XII DKV KJ"},
+            "5076": {nisn: "0069907311", nama: "CIKA NOVEL FEBIOLA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "25 NOPEMBER 2006",kelas: "XII DKV KJ"},
+            "5077": {nisn: "0061230144", nama: "DEDE YULIKA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "20 JUNI 2006",kelas: "XII DKV KJ"},
+            "5078": {nisn: "0077905841", nama: "DEFI ALFIAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "6 PEBRUARI 2007",kelas: "XII DKV KJ"},
+            "5079": {nisn: "0085656246", nama: "DEFRITA RATNA PAMBAYUN", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "24 JANUARI 2008",kelas: "XII DKV KJ"},
+            "5080": {nisn: "0074915290", nama: "DEVI TRI HAPSARI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "17 DESEMBER 2007",kelas: "XII DKV KJ"},
+            "5081": {nisn: "0086731381", nama: "DIKA AZIS SAPUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "18 MARET 2008",kelas: "XII DKV KJ"},
+            "5082": {nisn: "0071028181", nama: "FIFI LIA AYU NINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "2 MARET 2007",kelas: "XII DKV KJ"},
+            "5083": {nisn: "0063407713", nama: "GALIH PANGESTU", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "5 AGUSTUS 2006",kelas: "XII DKV KJ"},
+            "5084": {nisn: "0076709740", nama: "GAMA ANDIKA VENSENSA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "20 MEI 2007",kelas: "XII DKV KJ"},
+            "5086": {nisn: "0064884285", nama: "JESICCA TIFFANY SHANDRA KRISTY", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "6 AGUSTUS 2006",kelas: "XII DKV KJ"},
+            "5087": {nisn: "0077960308", nama: "KANDA PRATAMA PUTRA", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "15 JULI 2007",kelas: "XII DKV KJ"},
+            "5088": {nisn: "0077669546", nama: "MARSELIYANA ROHYATUL JANAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "14 MARET 2007",kelas: "XII DKV KJ"},
+            "5090": {nisn: "0078481006", nama: "NADILA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "31 AGUSTUS 2007",kelas: "XII DKV KJ"},
+            "5091": {nisn: "0079270695", nama: "NESA ANGGI RAHMADANI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "3 OKTOBER 2007",kelas: "XII DKV KJ"},
+            "5092": {nisn: "0065492327", nama: "NUR LENI", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "7 AGUSTUS 2006",kelas: "XII DKV KJ"},
+            "5093": {nisn: "0067319768", nama: "RETNO DIYAH AYU SULISTIANINGRUM", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "23 MEI 2006",kelas: "XII DKV KJ"},
+            "5094": {nisn: "0066152528", nama: "RISKANATASYA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "27 MARET 2007",kelas: "XII DKV KJ"},
+            "5095": {nisn: "0074475703", nama: "RISKI RASELINO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "4 MEI 2007",kelas: "XII DKV KJ"},
+            "5096": {nisn: "0075553423", nama: "RIZAL MUKTI WIBOWO", tempatLahir: "CILACAP", kelamin: "L", tanggalLahir: "21 MARET 2007",kelas: "XII DKV KJ"},
+            "5097": {nisn: "0075310235", nama: "SAPITRI CAHYANINGSIH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "22 JUNI 2007",kelas: "XII DKV KJ"},
+            "5098": {nisn: "0076505341", nama: "SITI NUR ROHMAH", tempatLahir: "CILACAP ", kelamin: "P", tanggalLahir: "38829",kelas: "XII DKV KJ"},
+            "5099": {nisn: "0075608601", nama: "SITI USWATUN HASANAH", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "13 MARET 2007",kelas: "XII DKV KJ"},
+            "5100": {nisn: "0083653128", nama: "SONYA ANJANI", tempatLahir: "CILACAP ", kelamin: "P", tanggalLahir: "28 JANUARI 2008",kelas: "XII DKV KJ"},
+            "5101": {nisn: "0075636317", nama: "USWATUN MUSFINGAH", tempatLahir: "CILACAP ", kelamin: "P", tanggalLahir: "5 MARET 2007",kelas: "XII DKV KJ"},
+            "5102": {nisn: "0074705898", nama: "VANEZAH TRISTA NAZILLA SALIMA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "15 MEI 2007",kelas: "XII DKV KJ"},
+            "5103": {nisn: "0064032132", nama: "WINDA SOVIANA", tempatLahir: "CILACAP", kelamin: "P", tanggalLahir: "17 OKTOBER 2006",kelas: "XII DKV KJ"},
+            "5104": {nisn: "0079496088", nama: "WULAN AJENG SETIANINGRUM", tempatLahir: "CILACAP ", kelamin: "P", tanggalLahir: "25 JULI 2007",kelas: "XII DKV KJ"},
+            "5105": {nisn: "0075315364", nama: "ZAHRA PRATIWI", tempatLahir: "CILACAP ", kelamin: "P", tanggalLahir: "25 JANUARI 2007",kelas: "XII DKV KJ"}
+        };
+
+        // Fungsi untuk mendapatkan parameter dari URL
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // Fungsi untuk mengupdate countdown
+        function updateCountdown() {
+            const releaseDate = new Date('May 5, 2025 17:59:00').getTime();
+            const now = new Date().getTime();
+            const distance = releaseDate - now;
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('countdown').innerHTML = days + " hari " + hours + " jam " + 
+                minutes + " menit " + seconds + " detik";
+            
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdownSection').classList.add('d-none');
+                document.getElementById('formCard').classList.remove('d-none');
+            }
+        }
+
+        // Cek apakah akses admin atau waktu sudah sesuai
+        const isAdmin = getUrlParameter('akses') === 'admin';
+        const releaseDate = new Date('May 6, 2025 17:59:00').getTime();
+        const now = new Date().getTime();
+        
+        if (isAdmin || now >= releaseDate) {
+            // Tampilkan form kelulusan
+            document.getElementById('formCard').classList.remove('d-none');
+            document.getElementById('countdownSection').classList.add('d-none');
+        } else {
+            // Tampilkan countdown
+            document.getElementById('formCard').classList.add('d-none');
+            document.getElementById('countdownSection').classList.remove('d-none');
+            updateCountdown();
+            const countdownInterval = setInterval(updateCountdown, 1000);
+        }
+
+        document.getElementById('formKelulusan').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nis = document.getElementById('nis').value;
+            const formCard = document.getElementById('formCard');
+            const hasilKelulusan = document.getElementById('hasilKelulusan');
+            const contentHasil = document.getElementById('contentHasil');
+            
+            // Sembunyikan form
+            formCard.classList.add('d-none');
+            
+            // Cek apakah NIS ada dalam data
+            if (dataSiswa[nis]) {
+                const siswa = dataSiswa[nis];
+                const jenisKelamin = siswa.kelamin === "L" ? "Laki-laki" : "Perempuan";
+                
+                contentHasil.innerHTML = `
+                    <h4 class="mb-4">Selamat!</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td class="fw-bold text-start">NIS</td>
+                                <td class="text-start">${nis}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-start">NISN</td>
+                                <td class="text-start">${siswa.nisn}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-start">Nama</td>
+                                <td class="text-start">${siswa.nama}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-start">Tempat Lahir</td>
+                                <td class="text-start">${siswa.tempatLahir}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-start">Jenis Kelamin</td>
+                                <td class="text-start">${jenisKelamin}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-start">Tanggal Lahir</td>
+                                <td class="text-start">${siswa.tanggalLahir}</td>
+                            </tr>
+                            <tr>
+                                <td class="fw-bold text-start">Kelas</td>
+                                <td class="text-start">${siswa.kelas}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p class="lead mt-3 mb-4">Dinyatakan <strong class="text-success">LULUS</strong></p>
+                    <div class="alert alert-success" role="alert">
+                        Silahkan menunggu info lebih lanjut untuk pengambilan ijazah.
+                    </div>
+                    <button class="btn btn-primary mt-3" onclick="window.print()">Cetak Hasil</button>
+                `;
+                
+                // Ubah warna header hasil kelulusan menjadi hijau
+                document.querySelector('#hasilKelulusan .card-header').classList.remove('bg-danger');
+                document.querySelector('#hasilKelulusan .card-header').classList.add('bg-success');
+            } else {
+                // Jika NIS tidak ditemukan
+                contentHasil.innerHTML = `
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading mb-3">Data Tidak Ditemukan!</h4>
+                        <p>Maaf, NIS <strong>${nis}</strong> tidak terdaftar dalam database kami.</p>
+                        <p>Silahkan periksa kembali NIS yang Anda masukkan atau hubungi pihak sekolah.</p>
+                    </div>
+                `;
+                
+                // Ubah warna header hasil kelulusan menjadi merah
+                document.querySelector('#hasilKelulusan .card-header').classList.remove('bg-success');
+                document.querySelector('#hasilKelulusan .card-header').classList.add('bg-danger');
+                document.querySelector('#hasilKelulusan .card-header h3').textContent = 'Data Tidak Ditemukan';
+            }
+            
+            hasilKelulusan.classList.remove('d-none');
+        });
+        
+        document.getElementById('backButton').addEventListener('click', function() {
+            // Tampilkan form kembali
+            document.getElementById('formCard').classList.remove('d-none');
+            // Sembunyikan hasil
+            document.getElementById('hasilKelulusan').classList.add('d-none');
+            // Reset form
+            document.getElementById('nis').value = '';
+        });
+    </script>
+</body>
+</html>
